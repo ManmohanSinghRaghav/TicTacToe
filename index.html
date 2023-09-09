@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-weight: bolder;
+            font-family: Chiller;
+            letter-spacing: 2px;
+        }
+
+        body {
+            color: white;
+            text-align: center;
+            background-color: rgb(235, 216, 162);
+        }
+
+        .main1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .main2 {
+            height: 40vw;
+            width: 40vw;
+            border-radius: 20px;
+            background-color: rgb(250, 190, 122);
+        }
+
+        .inf {
+            margin: 1rem;
+            border-radius: 20px;
+            border: 5px solid rgb(250, 190, 122);
+        }
+
+        .lines {
+            font-size: 100px;
+            border-radius: 0%;
+            text-align: center;
+        }
+
+        .btnr {
+            position: absolute;
+            width: 13vw;
+            height: 13vw;
+            font-size: 10vw;
+            text-align: center;
+            border-radius: 20px;
+            transform: translate(-50%,-50%);
+            color: rgb(173, 202, 164);
+            border-color: rgb(255, 255, 255);
+            background-color: rgb(89, 158, 153);
+        }
+
+        .score {
+            text-align: center;
+            width: 20vw;
+            height: 20vw;
+        }
+
+        .tdp {
+            padding: 2vw;
+            font-size: 30px;
+            color: rgb(133, 84, 28);
+            border: 2px solid rgb(250, 190, 122);
+        }
+
+        .hd:nth-child(1) {
+            border-top-left-radius: 10%;
+            text-transform: capitalize;
+        }
+
+        .hd:nth-child(2) {
+            border-top-right-radius: 10%;
+            text-transform: capitalize;
+        }
+
+        .hd1:nth-child(1) {
+            border-bottom-left-radius: 10%;
+        }
+
+        .hd1:nth-child(2) {
+            border-bottom-right-radius: 10%;
+        }
+
+        .btncn {
+            padding: 0;
+            border-bottom-left-radius: 10%;
+            border-bottom-right-radius: 10%;
+        }
+
+        .nc_btn {
+            width: 80%;
+            height: 5rem;
+            color: rgb(138, 78, 9);
+            background-color: rgb(245, 219, 149);
+            font-size: 2.5rem;
+            border-width: 0.3rem;
+            border-color: rgb(250, 190, 122);
+            border-radius: 10px;
+        }
+        
+        .result {
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            z-index: 2;
+            display: none;
+            font-size: 4rem;
+            position: absolute;
+            border-radius: 20px;
+            flex-direction: column;
+            color: rgba(77, 0, 0, 0.726);
+            transform: translate(-50%, -50%);
+            background-color: rgb(250, 190, 122);
+            border: 10px outset #e4c582;
+        }
+
+        .ans {
+            margin: 0%;
+            font-size: 4rem;
+            background-color: rgb(184, 56, 56);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            color: rgb(250, 190, 122);
+        }
+
+        .btn {
+            margin-bottom: 0.5rem;
+            height: 3rem;
+            width: 100%;
+            border-radius: 20px;
+            font-size: 2rem;
+            border-color: rgb(89, 158, 153);
+            background-color: rgb(82, 116, 117);
+            color: rgb(173, 202, 164);
+        }
+
+        .load {
+            padding: 20px;
+            text-transform: capitalize;
+            animation:flash 1s linear infinite;
+        }
+
+        @keyframes flash {
+            0%{
+                color:rgb(141, 46, 46);
+                /* text-decoration: 3px underline rgb(255, 217, 0); */
+            }
+            50%{
+                color:rgb(255, 132, 132);
+                /* text-decoration: none; */
+            }
+            100%{
+                color:rgb(141, 46, 46);
+                /* text-decoration: 3px underline  rgb(255, 0, 0); */
+            }
+        }
+
+        .name1,
+        .name2 {
+            height: 2.5rem;
+            font-size: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            color: rgb(133, 84, 28);
+            border: 0.2rem solid rgb(133, 84, 28);
+            background-color: rgb(235, 216, 162);
+            text-transform: capitalize;
+        }
+
+        .blank {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(90, 90, 90, 0.411);
+            z-index: 1;
+            display: none;
+            text-align: center;
+        }
+
+        .blank b {
+            position: fixed;
+            z-index: 1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        
+        @media (max-width:700px) {
+            .main1 {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column-reverse;
+                height: 100vh;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="blank" id="blank">
+        <b>Please Wait...</b>
+    </div>
+    <div class="result" id="result">
+        <p class="ans">
+            Game End</p>
+        <b class="load" id="load"></b>
+        <input class="btn" onclick="restart();" type="button" value="Next Game">
+        <input class="btn" onclick="restart('full');" type="button" value="Restart">
+    </div>
+    <div class="main1">
+        <div class="ext">
+            <div class="inf">
+                <table class="score">
+                    <tr>
+                        <td class="tdp hd">
+                            <p id="p1sh">player1</p>
+                        </td>
+                        <td class="tdp hd">
+                            <p id="p2sh">player2</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdp">X</td>
+                        <td class="tdp">O</td>
+                    </tr>
+                    <tr>
+                        <td class="tdp hd1">
+                            <p id="p1s"></p>
+                        </td>
+                        <td class="tdp hd1">
+                            <p id="p2s"></p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <input type="button" onclick="pName()" class="nc_btn" id="nc" value="Change Name">
+            <!-- <div class="mode">
+                <input type="checkbox" onclick="tac('mp');" id="multi" class="multi"> Multiplayer <br>
+                <input type="checkbox" onclick="tac('sp');" id="single" class="single"> Single Player
+            </div> -->
+        </div>
+        <Table class="main2">
+            <tr>
+                <td class="lines">
+                    <input type="button" class="btnr r1" id="r1" onclick="tic(1);"></td>
+                <td class="lines">
+                    <input type="button" class="btnr r2" id="r2" onclick="tic(2);"></td>
+                <td class="lines">
+                    <input type="button" class="btnr r3" id="r3" onclick="tic(3);"></td>
+            </tr>
+            <tr>
+                <td class="lines">
+                    <input type="button" class="btnr r4" id="r4" onclick="tic(4);"></td>
+                <td class="lines">
+                    <input type="button" class="btnr r5" id="r5" onclick="tic(5);"></td>
+                <td class="lines">
+                    <input type="button" class="btnr r6" id="r6" onclick="tic(6);"></td>
+            </tr>
+            <tr>
+                <td class="lines">
+                    <input type="button" class="btnr r7" id="r7" onclick="tic(7);"></td>
+                <td class="lines">
+                    <input type="button" class="btnr r8" id="r8" onclick="tic(8);"></td>
+                <td class="lines">
+                    <input type="button" class="btnr r9" id="r9" onclick="tic(9);"></td>
+            </tr>
+        </Table>
+    </div>
+    <script type="text/javascript">
+        var num = 0;
+        var _1 = '';
+        var _2 = '';
+        var _3 = '';
+        var p1 = '';
+        var p2 = '';
+        var p3 = '';
+        var c1 = '';
+        var c2 = '';
+        var nc = true;
+        var score1 = 0;
+        var score2 = 0;
+        var times = '';
+        var cng = false;
+        var multi = true;
+        var p1name = 'Player1';
+        var p2name = 'Player2';
+        var result = 'Loading...';
+
+        document.getElementById('p1s').innerHTML = score1;
+        document.getElementById('p2s').innerHTML = score2;
+        document.getElementById('multi').checked = true;
+        document.getElementById('single').checked = false;
+
+        function tac(m) {
+            if (m == 'sp') {
+                document.getElementById('multi').checked = false;
+                document.getElementById('single').checked = true;
+                restart('full');
+                multi = false;
+            } else {
+                document.getElementById('multi').checked = true;
+                document.getElementById('single').checked = false;
+                restart('full');
+                multi = true
+            }
+            console.log('switch-multiplayer: ', multi);
+        }
+
+        function pName() {
+            if (nc == true) {
+                document.getElementById('p1sh').innerHTML = '<input type="text" class="name1" id="name1">';
+                document.getElementById('p2sh').innerHTML = '<input type="text" class="name2" id="name2">';
+                document.getElementById('nc').value = 'DONE';
+                nc = false;
+            } else if (nc == false) {
+                if (document.getElementById('name1').value !== '') {
+                    document.getElementById('p1sh').innerHTML = document.getElementById('name1').value;
+                } else {
+                    document.getElementById('p1sh').innerHTML = p1name;
+                }
+                if (document.getElementById('name2').value !== '') {
+                    document.getElementById('p2sh').innerHTML = document.getElementById('name2').value;
+                } else {
+                    document.getElementById('p2sh').innerHTML = p2name;
+                }
+                document.getElementById('nc').value = 'Change Again';
+                nc = true;
+            }
+        }
+
+        function restart(ele) {
+            console.log('alt:', cng);
+            if (cng == true) {
+                num = 0;
+                cng = false;
+            } else {
+                num = 1;
+                cng = true;
+            }
+            times = '';
+            result = 'loading...';
+            document.getElementById('r1').value = document.getElementById('r2').value = document.getElementById('r3')
+                .value = document.getElementById('r4').value = document.getElementById('r5').value = document
+                .getElementById('r6').value = document.getElementById('r7').value = document.getElementById('r8')
+                .value = document.getElementById('r9').value = times;
+            document.getElementById('load').innerHTML = result;
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('blank').style.display = 'none';
+            _1 = _2 = _3 = p1 = p2 = p3 = c1 = c2 = '';
+            document.getElementById('r1').disabled = false;
+            document.getElementById('r2').disabled = false;
+            document.getElementById('r3').disabled = false;
+            document.getElementById('r4').disabled = false;
+            document.getElementById('r5').disabled = false;
+            document.getElementById('r6').disabled = false;
+            document.getElementById('r7').disabled = false;
+            document.getElementById('r8').disabled = false;
+            document.getElementById('r9').disabled = false;
+
+            if (ele == 'full') {
+                score1 = 0;
+                score2 = 0;
+                document.getElementById('p1s').innerHTML = score1;
+                document.getElementById('p2s').innerHTML = score2;
+            }
+        }
+
+        function tic(i) {
+            // Show value (X) or (O)
+            if (num % 2 == 0) {
+                times = 'X';
+            } else {
+                times = 'O';
+            }
+
+            if (i == 1 && document.getElementById('r1').value == '') {
+                num += 1;
+                document.getElementById('r1').value = times;
+                document.getElementById('r1').disabled = true;
+                _1 += times + '_1';
+                p1 += times + 'p1';
+                c1 += times + 'c1';
+            } else if (i == 2 && document.getElementById('r2').value == '') {
+                num += 1;
+                document.getElementById('r2').value = times;
+                document.getElementById('r2').disabled = true;
+                _1 += times + '_1';
+                p2 += times + 'p2';
+            } else if (i == 3 && document.getElementById('r3').value == '') {
+                num += 1;
+                document.getElementById('r3').value = times;
+                document.getElementById('r3').disabled = true;
+                _1 += times + '_1';
+                p3 += times + 'p3';
+                c2 += times + 'c2';
+            } else if (i == 4 && document.getElementById('r4').value == '') {
+                num += 1;
+                document.getElementById('r4').value = times;
+                document.getElementById('r4').disabled = true;
+                _2 += times + '_2';
+                p1 += times + 'p1';
+            } else if (i == 5 && document.getElementById('r5').value == '') {
+                num += 1;
+                document.getElementById('r5').value = times;
+                document.getElementById('r5').disabled = true;
+                _2 += times + '_2';
+                p2 += times + 'p2';
+                c1 += times + 'c1';
+                c2 += times + 'c2';
+            } else if (i == 6 && document.getElementById('r6').value == '') {
+                num += 1;
+                document.getElementById('r6').value = times;
+                document.getElementById('r6').disabled = true;
+                _2 += times + '_2';
+                p3 += times + 'p3';
+            } else if (i == 7 && document.getElementById('r7').value == '') {
+                num += 1;
+                document.getElementById('r7').value = times;
+                document.getElementById('r7').disabled = true;
+                _3 += times + '_3';
+                p1 += times + 'p1';
+                c2 += times + 'c2';
+            } else if (i == 8 && document.getElementById('r8').value == '') {
+                num += 1;
+                document.getElementById('r8').value = times;
+                document.getElementById('r8').disabled = true;
+                _3 += times + '_3';
+                p2 += times + 'p2';
+            } else if (i == 9 && document.getElementById('r9').value == '') {
+                num += 1;
+                document.getElementById('r9').value = times;
+                document.getElementById('r9').disabled = true;
+                _3 += times + '_3';
+                p3 += times + 'p3';
+                c1 += times + 'c1';
+            }
+            if (document.getElementById('result').style.display == 'flex') {
+                document.getElementById('r1').value = document.getElementById('r2').value = document.getElementById(
+                        'r3')
+                    .value = document.getElementById('r4').value = document.getElementById('r5').value = document
+                    .getElementById('r6').value = document.getElementById('r7').value = document.getElementById('r8')
+                    .value = document.getElementById('r9').value = '';
+                num = 12;
+            }
+            console.log(_1, ' | ', _2, ' | ', _3, ' | ', p1, ' | ', p2, ' | ', p3, ' | ', c1, ' | ', c2);
+            // possibilities of winning  by players
+            var r1 = document.getElementById('r1').value;
+            var r2 = document.getElementById('r2').value;
+            var r3 = document.getElementById('r3').value;
+            var r4 = document.getElementById('r4').value;
+            var r5 = document.getElementById('r5').value;
+            var r6 = document.getElementById('r6').value;
+            var r7 = document.getElementById('r7').value;
+            var r8 = document.getElementById('r8').value;
+            var r9 = document.getElementById('r9').value;
+
+            // Possibility of Player1 (X) to win
+            //  parallel X ---
+            if ((r1 == r2) && (r2 == r3) && (r3 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            } else if ((r4 == r5) && (r5 == r6) && (r6 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            } else if ((r7 == r8) && (r8 == r9) && (r9 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            }
+            // cross X
+            else if ((r1 == r5) && (r5 == r9) && (r9 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            } else if ((r3 == r5) && (r5 == r7) && (r7 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            }
+            // parallel Y |||
+            else if ((r1 == r4) && (r4 == r7) && (r7 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            } else if ((r2 == r5) && (r5 == r8) && (r8 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            } else if ((r3 == r6) && (r6 == r9) && (r9 == 'X')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score1 += 1;
+                result = document.getElementById('p1sh').innerHTML + ' ' + 'Won';
+            }
+
+            // Possibility of Player2 (i) to win
+            //  parallel X ---
+            else if ((r1 == r2) && (r2 == r3) && (r3 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            } else if ((r4 == r5) && (r5 == r6) && (r6 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            } else if ((r7 == r8) && (r8 == r9) && (r9 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            }
+            // cross X
+            else if ((r1 == r5) && (r5 == r9) && (r9 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            } else if ((r3 == r5) && (r5 == r7) && (r7 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            }
+            // parallel Y |||
+            else if ((r1 == r4) && (r4 == r7) && (r7 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            } else if ((r2 == r5) && (r5 == r8) && (r8 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            } else if ((r3 == r6) && (r6 == r9) && (r9 == 'O')) {
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('blank').style.display = 'block';
+                score2 += 1;
+                result = document.getElementById('p2sh').innerHTML + ' ' + 'Won';
+            } else if (cng == true) {
+                if (num == 10) {
+                    result = 'TIE';
+                    document.getElementById('result').style.display = 'flex';
+                    document.getElementById('blank').style.display = 'block';
+                }
+            }else if (cng == false) {
+                if (num == 9) {
+                    result = 'TIE';
+                    document.getElementById('result').style.display = 'flex';
+                    document.getElementById('blank').style.display = 'block';
+                }
+            }
+            console.log(num);
+            console.log('check-multiplayer: ', multi);
+            if (multi == false) {
+                setTimeout(() => {
+                    document.getElementById('blank').style.display = 'block';
+                }, 0);
+                setTimeout(toe, 1000);
+            }
+
+            document.getElementById('load').innerHTML = result;
+            document.getElementById('p1s').innerHTML = score1;
+            document.getElementById('p2s').innerHTML = score2;
+        }
+        // var element = "";
+        function toe() {
+        //     _ar = [r1.value, r2.value, r3.value, r4.value, r5.value, r6.value, r7.value, r8.value, r9.value];
+        //     for (let i = 0; i < _ar.length; i++) {
+        //         if (_ar[i] != '') {
+        //             element += _ar[i];
+        //         }
+        //         // var ch = 1+Math.floor(Math.random()*i);
+        //         // console.log('lucky',ch);
+        //         console.log("possibilities....");
+        //         console.log("element:",element);
+        //     }
+        //     console.log('num:',num,"list:",_ar);
+        //     console.log('Final-Check-multiplayer:', multi);
+        //     document.getElementById('blank').style.display = 'none';
+        // // single player mode
+
+        //     if (_1 == 'X_1X_1') {
+        //         if (r1.value == '') {
+        //             document.getElementById('r1').value = times;  
+        //         } else if (r2.value == '') {
+        //             document.getElementById('r2').value = times;  
+        //         } else if (r3.value == '') {
+        //             document.getElementById('r3').value = times;  
+        //         }
+        //     } else if (_2 == 'X_2X_2') {
+        //         if (r4.value == '') {
+        //             document.getElementById('r4').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else  if (r6.value == '') {
+        //             document.getElementById('r6').value = times;  
+        //         }                
+        //     } else if (_3 == 'X_3X_3') {
+        //         if (r7.value == '') {
+        //             document.getElementById('r7').value = times;  
+        //         } else if (r8.value == '') {
+        //             document.getElementById('r8').value = times;  
+        //         } else if (r9.value == '') {
+        //             document.getElementById('r9').value = times;  
+        //         }                
+        //     } else if (p1 == 'Xp1Xp1') {
+        //         if (r1.value == '') {
+        //             document.getElementById('r1').value = times;  
+        //         } else if (r4.value == '') {
+        //             document.getElementById('r4').value = times;  
+        //         } else if (r7.value == '') {
+        //             document.getElementById('r7').value = times;  
+        //         }                
+        //     } else if (p2 == 'Xp2Xp2') {
+        //         if (r2.value == '') {
+        //             document.getElementById('r2').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else if (r8.value == '') {
+        //             document.getElementById('r8').value = times;  
+        //         }                
+        //     } else if (p3 == 'Xp3Xp3') {
+        //         if (r3.value == '') {
+        //             document.getElementById('r3').value = times;  
+        //         } else if (r6.value == '') {
+        //             document.getElementById('r6').value = times;  
+        //         } else if (r9.value == '') {
+        //             document.getElementById('r9').value = times;  
+        //         }                
+        //     } else if (c1 == 'Xc1Xc2') {
+        //         if (r1.value == '') {
+        //             document.getElementById('r1').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else if (r9.value == '') {
+        //             document.getElementById('r9').value = times;  
+        //         }                
+        //     } else if (c2 == 'Xc2Xc2') {
+        //         if (r3.value == '') {
+        //             document.getElementById('r3').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else if (r7.value == '') {
+        //             document.getElementById('r7').value = times;  
+        //         }                
+        //     } else if (_1 == 'O_1O_1') {
+        //         if (r1.value == '') {
+        //             document.getElementById('r1').value = times;  
+        //         } else if (r2.value == '') {
+        //             document.getElementById('r2').value = times;  
+        //         } else if (r3.value == '') {
+        //             document.getElementById('r3').value = times;  
+        //         }
+        //     } else if (_2 == 'O_2O_2') {
+        //         if (r4.value == '') {
+        //             document.getElementById('r4').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else  if (r6.value == '') {
+        //             document.getElementById('r6').value = times;  
+        //         }                
+        //     } else if (_3 == 'O_3O_3') {
+        //         if (r7.value == '') {
+        //             document.getElementById('r7').value = times;  
+        //         } else if (r8.value == '') {
+        //             document.getElementById('r8').value = times;  
+        //         } else if (r9.value == '') {
+        //             document.getElementById('r9').value = times;  
+        //         }                
+        //     } else if (p1 == 'Op1Op1') {
+        //         if (r1.value == '') {
+        //             document.getElementById('r1').value = times;  
+        //         } else if (r4.value == '') {
+        //             document.getElementById('r4').value = times;  
+        //         } else if (r7.value == '') {
+        //             document.getElementById('r7').value = times;  
+        //         }                
+        //     } else if (p2 == 'Op2Op2') {
+        //         if (r2.value == '') {
+        //             document.getElementById('r2').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else if (r8.value == '') {
+        //             document.getElementById('r8').value = times;  
+        //         }                
+        //     } else if (p3 == 'Op3Op3') {
+        //         if (r3.value == '') {
+        //             document.getElementById('r3').value = times;  
+        //         } else if (r6.value == '') {
+        //             document.getElementById('r6').value = times;  
+        //         } else if (r9.value == '') {
+        //             document.getElementById('r9').value = times;  
+        //         }                
+        //     } else if (c1 == 'Oc1Oc2') {
+        //         if (r1.value == '') {
+        //             document.getElementById('r1').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else if (r9.value == '') {
+        //             document.getElementById('r9').value = times;  
+        //         }                
+        //     } else if (c2 == 'Oc2Oc2') {
+        //         if (r3.value == '') {
+        //             document.getElementById('r3').value = times;  
+        //         } else if (r5.value == '') {
+        //             document.getElementById('r5').value = times;  
+        //         } else if (r7.value == '') {
+        //             document.getElementById('r7').value = times;  
+        //         }
+        //     }
+        //     num += 1;
+        }
+    </script>
+</body>
+
+</html>
+<!-- 
+    ----------------------------------------------------------------------------------
+1. basic stucture                   |:|:|:(done):|:|:|
+2. functions : 
+    a) show X and O.                |:|:|:(done):|:|:|
+    b) save X and O.                |:|:|:(done):|:|:|
+    c) all combo of three recognize.|:|:|:(done):|:|:| 
+    d) result who win?              |:|:|:(done):|:|:|
+3. extra function :
+    a) Score.                       |:|:|:(done):|:|:|
+    b) Restart.                     |:|:|:(done):|:|:| 
+    c) Change Name.                 |:|:|:(done):|:|:|
+4. decoration
+    ----------------------------------------------------------------------------------
+-->
